@@ -11,6 +11,7 @@ from cs285.env_configs.schedule import (
     LinearSchedule,
     PiecewiseSchedule,
     ConstantSchedule,
+    SinusoidalSchedule
 )
 import cs285.infrastructure.pytorch_util as ptu
 
@@ -52,7 +53,6 @@ def basic_dqn_config(
         ],
         outside_value=0.02,
     )
-
     def make_env(render: bool = False):
         return RecordEpisodeStatistics(gym.make(env_name, render_mode="rgb_array" if render else None))
 

@@ -86,7 +86,8 @@ def run_training_loop(config: dict, logger: Logger, args: argparse.Namespace):
             replay_buffer.on_reset(observation=observation[-1, ...])
 
     reset_env_training()
-
+    
+    episode_timestep, rollout_number = 0, 0
     for step in tqdm.trange(config["total_steps"], dynamic_ncols=True):
         epsilon = exploration_schedule.value(step)
         
@@ -109,12 +110,15 @@ def run_training_loop(config: dict, logger: Logger, args: argparse.Namespace):
 
         # Handle episode termination
         if done or truncated:
+            episode_timestep = 0
+            rollout_number += 1
+            
             reset_env_training()
-
             logger.log_scalar(info["episode"]["r"], "train_return", step)
             logger.log_scalar(info["episode"]["l"], "train_ep_len", step)
         else:
             observation = next_observation
+            episode_timestep += 1   
 
         # Main DQN training loop
         if step >= config["learning_starts"]:
