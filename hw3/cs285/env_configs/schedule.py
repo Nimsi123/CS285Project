@@ -13,6 +13,8 @@ def get_schedule_type(schedule_type: str):
             return PiecewiseSchedule
         elif schedule_type == "constant":
             return ConstantSchedule
+        elif schedule_type == "adaptive":
+            return AdaptiveRewardBasedSchedule
         else:
             raise ValueError("Invalid schedule type {}".format(schedule_type))
     
