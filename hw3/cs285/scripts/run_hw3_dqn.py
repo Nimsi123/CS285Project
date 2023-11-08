@@ -88,9 +88,11 @@ def run_training_loop(config: dict, logger: Logger, args: argparse.Namespace):
             replay_buffer.on_reset(observation=observation[-1, ...])
 
     reset_env_training()
-
+    # need to make sure this stuff is getting properly reset between the ends of each episodes
+    episode_timestep, rollout_number = 0, 0
+    rewards = []
     for step in tqdm.trange(config["total_steps"], dynamic_ncols=True):
-        epsilon = exploration_schedule.value(step)
+        epsilon = exploration_schedule.value(step, rewards)
         
         # TODO(student): Compute action
         action = agent.get_action(observation, epsilon)
@@ -99,6 +101,9 @@ def run_training_loop(config: dict, logger: Logger, args: argparse.Namespace):
         next_observation, reward, done, info = env.step(action)
         next_observation = np.asarray(next_observation)
         truncated = info.get("TimeLimit.truncated", False)
+        rewards.append(reward)
+        if len(rewards) > 10000:
+            rewards = rewards[-10000:]
 
         # TODO(student): Add the data to the replay buffer
         if isinstance(replay_buffer, MemoryEfficientReplayBuffer):
@@ -111,12 +116,15 @@ def run_training_loop(config: dict, logger: Logger, args: argparse.Namespace):
 
         # Handle episode termination
         if done or truncated:
+            episode_timestep = 0
+            rollout_number += 1
+            
             reset_env_training()
-
             logger.log_scalar(info["episode"]["r"], "train_return", step)
             logger.log_scalar(info["episode"]["l"], "train_ep_len", step)
         else:
             observation = next_observation
+            episode_timestep += 1   
 
         # Main DQN training loop
         if step >= config["learning_starts"]:

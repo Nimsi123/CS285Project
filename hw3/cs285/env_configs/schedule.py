@@ -1,3 +1,5 @@
+import numpy as np
+
 import yaml
 class Schedule(object):
     def value(self, t):
@@ -100,3 +102,55 @@ class LinearSchedule(object):
         """See Schedule.value"""
         fraction  = min(float(t) / self.schedule_timesteps, 1.0)
         return self.initial_p + fraction * (self.final_p - self.initial_p)
+
+class SinusoidalSchedule:
+    
+    def __init__(self, period, decay):
+        self.period = period
+        self.decay = decay
+    
+    def value(self, t):
+        eps_max = 0.5
+        return eps_max * (1 + np.sin(2 * np.pi * t / self.period)) / 2 * np.exp(-self.decay * t)
+    
+
+class AdaptiveRewardBasedSchedule:
+    
+    def __init__(self, 
+                 n=10000, 
+                 p=0.005, 
+                 alpha=0.99, 
+                 threshold=0.15, 
+                 eps_max=0.5):
+        """
+        Adaptive schedule based on reward.
+        Parameters
+        ----------
+        n: int
+            Number of steps to look back when computing the relative change 
+            in reward.
+        p: float
+            Fraction of n to consider when computing the relative change 
+            in reward.
+        alpha: float
+            Decay rate for the exponential moving average.
+        threshold: float
+            Threshold used for impulse control.
+        eps_max: float
+            Maximum value of epsilon.
+        """
+        self.n = n
+        self.p = p
+        self.alpha = alpha
+        self.threshold = threshold
+        self.eps_max = eps_max
+        self.eps = eps_max
+        
+    def value(self, t, reward):
+        if len(reward) >= self.n:
+            m = int(self.p*self.n)
+            reward_recent = np.mean(reward[-m:])
+            reward_long = np.mean(reward[-self.n:])
+            impulse = int(abs((reward_long - reward_recent) / reward_long) < self.threshold)
+            self.eps = (self.alpha) * self.eps + (1 - self.alpha) * impulse * self.eps_max 
+        return self.eps
