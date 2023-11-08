@@ -1,3 +1,5 @@
+import numpy as np
+
 class Schedule(object):
     def value(self, t):
         """Value of the schedule at time t"""
@@ -82,3 +84,30 @@ class LinearSchedule(object):
         """See Schedule.value"""
         fraction  = min(float(t) / self.schedule_timesteps, 1.0)
         return self.initial_p + fraction * (self.final_p - self.initial_p)
+
+class SinusoidalSchedule:
+    
+    def __init__(self, period, decay):
+        self.period = period
+        self.decay = decay
+    
+    def value(self, t):
+        eps_max = 0.5
+        return eps_max * (1 + np.sin(2 * np.pi * t / self.period)) / 2 * np.exp(-self.decay * t)
+    
+
+class AdaptiveRewardBasedSchedule:
+    
+    def __init__(self, alpha=0.99, threshold=0.05, eps_max=0.5):
+        self.alpha = alpha
+        self.threshold = threshold
+        self.eps_max = eps_max
+        self.eps = eps_max
+        
+    def value(self, t, reward):
+        if len(reward) >= 10000:
+            reward_50 = np.mean(reward[-50:])
+            reward_10000 = np.mean(reward[-10000:])
+            impulse = int(abs((reward_10000 - reward_50) / reward_10000) < self.threshold)
+            self.eps = (self.alpha) * self.eps + (1 - self.alpha) * impulse * self.eps_max 
+        return self.eps
