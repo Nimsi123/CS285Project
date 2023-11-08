@@ -1,8 +1,26 @@
+import yaml
 class Schedule(object):
     def value(self, t):
         """Value of the schedule at time t"""
         raise NotImplementedError()
 
+def get_schedule_type(schedule_type: str):
+        if schedule_type == "linear":
+            return LinearSchedule
+        elif schedule_type == "piecewise":
+            return PiecewiseSchedule
+        elif schedule_type == "constant":
+            return ConstantSchedule
+        else:
+            raise ValueError("Invalid schedule type {}".format(schedule_type))
+    
+def get_schedule(exploration_schedule_file) -> Schedule:
+    with open(exploration_schedule_file, "r") as f:
+        exploration_kwargs = yaml.load(f, Loader=yaml.SafeLoader)
+    schedule_type = exploration_kwargs["schedule_type"]
+    schedule_type = get_schedule_type(schedule_type)
+    exploration_kwargs.pop("schedule_type")
+    return schedule_type(**exploration_kwargs)
 
 class ConstantSchedule(object):
     def __init__(self, value):

@@ -7,11 +7,12 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from cs285.env_configs.schedule import (
-    LinearSchedule,
-    PiecewiseSchedule,
-    ConstantSchedule,
-)
+# from cs285.env_configs.schedule import (
+#     LinearSchedule,
+#     PiecewiseSchedule,
+#     ConstantSchedule,
+# )
+import cs285.env_configs.schedule as schedule
 import cs285.infrastructure.pytorch_util as ptu
 
 def basic_dqn_config(
@@ -27,6 +28,7 @@ def basic_dqn_config(
     use_double_q: bool = False,
     learning_starts: int = 20000,
     batch_size: int = 128,
+    exploration_schedule_file: str = None,
     **kwargs
 ):
     def make_critic(observation_shape: Tuple[int, ...], num_actions: int) -> nn.Module:
@@ -44,14 +46,9 @@ def basic_dqn_config(
         optimizer: torch.optim.Optimizer,
     ) -> torch.optim.lr_scheduler._LRScheduler:
         return torch.optim.lr_scheduler.ConstantLR(optimizer, factor=1.0)
-
-    exploration_schedule = PiecewiseSchedule(
-        [
-            (0, 1),
-            (total_steps * 0.1, 0.02),
-        ],
-        outside_value=0.02,
-    )
+    
+    
+    exploration_schedule = None # get_exploration_schedule(exploration_schedule_file)
 
     def make_env(render: bool = False):
         return RecordEpisodeStatistics(gym.make(env_name, render_mode="rgb_array" if render else None))

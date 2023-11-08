@@ -20,6 +20,8 @@ from cs285.infrastructure.replay_buffer import MemoryEfficientReplayBuffer, Repl
 
 from scripting_utils import make_logger, make_config
 
+import cs285.env_configs.schedule as schedule
+
 MAX_NVIDEO = 2
 
 
@@ -188,6 +190,7 @@ def main():
     parser.add_argument("--no_gpu", "-ngpu", action="store_true")
     parser.add_argument("--which_gpu", "-gpu_id", default=0)
     parser.add_argument("--log_interval", type=int, default=1000)
+    parser.add_argument("--exploration_schedule_file", '-esf', type=str, default=None)
 
     args = parser.parse_args()
 
@@ -195,6 +198,7 @@ def main():
     logdir_prefix = "hw3_dqn_"  # keep for autograder
 
     config = make_config(args.config_file)
+    config['exploration_schedule'] = schedule.get_schedule(args.exploration_schedule_file)
     logger = make_logger(logdir_prefix, config)
 
     run_training_loop(config, logger, args)
