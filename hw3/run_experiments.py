@@ -47,6 +47,22 @@ def find_best_hyperparameters_for_env(base_command, hyperparameters, num_iterati
 
 commands = [f'sleep 0.5 && echo Process finished && touch test/{i}' for i in range(100)]
 
+hyperparameters = {
+    "alpha": [],
+    "N": [],
+    "P": [],
+    "Threshold": [],
+    "Impulse Strength": [],
+}
+
+best_hyperparameters = {
+    "alpha": 0,
+    "N": 0,
+    "P": 0,
+    "Threshold": 0,
+    "Impulse Strength": 0,
+}
+
 step = 5
 for i in range(0, len(commands), step):
     processes = []
