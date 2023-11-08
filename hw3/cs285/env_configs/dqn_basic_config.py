@@ -46,16 +46,14 @@ def basic_dqn_config(
         optimizer: torch.optim.Optimizer,
     ) -> torch.optim.lr_scheduler._LRScheduler:
         return torch.optim.lr_scheduler.ConstantLR(optimizer, factor=1.0)
-
-    # exploration_schedule = PiecewiseSchedule(
-    #     [
-    #         (0, 1),
-    #         (total_steps * 0.1, 0.02),
-    #     ],
-    #     outside_value=0.02,
-    # )
-    # exploration_schedule = SinusoidalSchedule(73, 0)
-    exploration_schedule = AdaptiveRewardBasedSchedule(alpha=0.99, threshold=0.15, eps_max=0.5)
+    
+    exploration_schedule = AdaptiveRewardBasedSchedule(
+        n=10000, 
+        p=0.005, 
+        alpha=0.99, 
+        threshold=0.15, 
+        eps_max=0.5
+    )
     def make_env(render: bool = False):
         return RecordEpisodeStatistics(gym.make(env_name, render_mode="rgb_array" if render else None))
 
