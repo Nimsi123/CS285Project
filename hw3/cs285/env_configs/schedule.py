@@ -1,10 +1,30 @@
 import numpy as np
 
+import yaml
 class Schedule(object):
     def value(self, t):
         """Value of the schedule at time t"""
         raise NotImplementedError()
 
+def get_schedule_type(schedule_type: str):
+        if schedule_type == "linear":
+            return LinearSchedule
+        elif schedule_type == "piecewise":
+            return PiecewiseSchedule
+        elif schedule_type == "constant":
+            return ConstantSchedule
+        elif schedule_type == "adaptive":
+            return AdaptiveRewardBasedSchedule
+        else:
+            raise ValueError("Invalid schedule type {}".format(schedule_type))
+    
+def get_schedule(exploration_schedule_file) -> Schedule:
+    with open(exploration_schedule_file, "r") as f:
+        exploration_kwargs = yaml.load(f, Loader=yaml.SafeLoader)
+    schedule_type = exploration_kwargs["schedule_type"]
+    schedule_type = get_schedule_type(schedule_type)
+    exploration_kwargs.pop("schedule_type")
+    return schedule_type(**exploration_kwargs)
 
 class ConstantSchedule(object):
     def __init__(self, value):
@@ -98,16 +118,41 @@ class SinusoidalSchedule:
 
 class AdaptiveRewardBasedSchedule:
     
-    def __init__(self, alpha=0.99, threshold=0.05, eps_max=0.5):
+    def __init__(self, 
+                 n=10000, 
+                 p=0.005, 
+                 alpha=0.99, 
+                 threshold=0.15, 
+                 eps_max=0.5):
+        """
+        Adaptive schedule based on reward.
+        Parameters
+        ----------
+        n: int
+            Number of steps to look back when computing the relative change 
+            in reward.
+        p: float
+            Fraction of n to consider when computing the relative change 
+            in reward.
+        alpha: float
+            Decay rate for the exponential moving average.
+        threshold: float
+            Threshold used for impulse control.
+        eps_max: float
+            Maximum value of epsilon.
+        """
+        self.n = n
+        self.p = p
         self.alpha = alpha
         self.threshold = threshold
         self.eps_max = eps_max
         self.eps = eps_max
         
     def value(self, t, reward):
-        if len(reward) >= 10000:
-            reward_50 = np.mean(reward[-50:])
-            reward_10000 = np.mean(reward[-10000:])
-            impulse = int(abs((reward_10000 - reward_50) / reward_10000) < self.threshold)
+        if len(reward) >= self.n:
+            m = int(self.p*self.n)
+            reward_recent = np.mean(reward[-m:])
+            reward_long = np.mean(reward[-self.n:])
+            impulse = int(abs((reward_long - reward_recent) / reward_long) < self.threshold)
             self.eps = (self.alpha) * self.eps + (1 - self.alpha) * impulse * self.eps_max 
         return self.eps
