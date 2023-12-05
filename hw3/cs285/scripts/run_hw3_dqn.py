@@ -185,6 +185,14 @@ def run_training_loop(config: dict, logger: Logger, args: argparse.Namespace):
                     video_title="eval_rollouts",
                 )
 
+    trajectories = utils.sample_n_trajectories(
+                    eval_env,
+                    agent,
+                    args.num_eval_trajectories,
+                    ep_len,
+                )
+    returns = [t["episode_statistics"]["r"] for t in trajectories]
+    print(f"last_reward = {np.mean(returns)}")
 
 def main():
     parser = argparse.ArgumentParser()
