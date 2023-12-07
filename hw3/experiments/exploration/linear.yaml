@@ -1,4 +1,4 @@
 schedule_type: linear
-schedule_timesteps: 10000
+schedule_timesteps: 20000
 final_p: 0.02
 initial_p: 1.0

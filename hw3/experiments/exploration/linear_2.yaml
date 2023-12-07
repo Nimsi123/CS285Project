@@ -1,0 +1,4 @@
+final_p: 0.02
+initial_p: 1.0
+schedule_timesteps: 10000
+schedule_type: linear

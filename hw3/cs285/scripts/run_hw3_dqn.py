@@ -102,8 +102,8 @@ def run_training_loop(config: dict, logger: Logger, args: argparse.Namespace):
         next_observation = np.asarray(next_observation)
         truncated = info.get("TimeLimit.truncated", False)
         rewards.append(reward)
-        if len(rewards) > 10000:
-            rewards = rewards[-10000:]
+        if len(rewards) > 50000:
+            rewards = rewards[-50000:]
 
         # TODO(student): Add the data to the replay buffer
         if isinstance(replay_buffer, MemoryEfficientReplayBuffer):
@@ -198,22 +198,23 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config_file", "-cfg", type=str, required=True)
 
-    parser.add_argument("--eval_interval", "-ei", type=int, default=10000)
+    parser.add_argument("--eval_interval", "-ei", type=int, default=1000)
     parser.add_argument("--num_eval_trajectories", "-neval", type=int, default=10)
     parser.add_argument("--num_render_trajectories", "-nvid", type=int, default=0)
 
     parser.add_argument("--seed", type=int, default=1)
     parser.add_argument("--no_gpu", "-ngpu", action="store_true")
     parser.add_argument("--which_gpu", "-gpu_id", default=0)
-    parser.add_argument("--log_interval", type=int, default=1000)
+    parser.add_argument("--log_interval", type=int, default=10)
     parser.add_argument("--exploration_schedule_file", '-esf', type=str, default=None)
-
+        
     args = parser.parse_args()
 
     # create directory for logging
     logdir_prefix = "hw3_dqn_"  # keep for autograder
 
     config = make_config(args.config_file)
+    config["log_name"] += f"_seed_{args.seed}"    
     config['exploration_schedule'] = schedule.get_schedule(args.exploration_schedule_file)
     logger = make_logger(logdir_prefix, config)
 

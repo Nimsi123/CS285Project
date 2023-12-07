@@ -1,0 +1,7 @@
+base_config: dqn_basic
+batch_size: 10
+env_name: CartPole-v1
+exp_name: lr_1e-05_batch_size_10_base_config_dqn_basic_env_name_CartPole-v1_target_update_period_1000_total_steps_20000_alpha_0.2_n_100_p_0.05_threshold_0.01_eps_max_0.1_schedule_type_adaptive
+lr: 1.0e-05
+target_update_period: 1000
+total_steps: 20000

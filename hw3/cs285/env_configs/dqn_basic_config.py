@@ -26,7 +26,7 @@ def basic_dqn_config(
     target_update_period: int = 1000,
     clip_grad_norm: Optional[float] = None,
     use_double_q: bool = False,
-    learning_starts: int = 20000,
+    learning_starts: int = 2500,
     batch_size: int = 128,
     exploration_schedule_file: str = None,
     **kwargs
@@ -46,7 +46,6 @@ def basic_dqn_config(
         optimizer: torch.optim.Optimizer,
     ) -> torch.optim.lr_scheduler._LRScheduler:
         return torch.optim.lr_scheduler.ConstantLR(optimizer, factor=1.0)
-    
     
     exploration_schedule = None # get_exploration_schedule(exploration_schedule_file)
 
