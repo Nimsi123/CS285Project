@@ -18,6 +18,7 @@ def find_best_run(commands, n):
             command_extra = f"--seed {i+1}"
             process = subprocess.Popen(command + " " + command_extra, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             processes[-1].append(process)
+            print(command + " " + command_extra)
 
     for process in processes:
         rewards = []
@@ -114,22 +115,39 @@ def find_best_hyperparameters_for_env(env, exploration, all_hyperparameters, num
     
     return best_hyperparameters
 
+
 all_hyperparameters = {
-    "alpha": [0.01, 0.05, 0.1, 0.2, 0.4, 0.8, 0.99],
-    "n": [100, 500, 1000, 2000, 5000, 10000],
-    "p": [0.01, 0.05, 0.1, 0.25, 0.5],
-    "threshold": [0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.6, 0.8],
-    "eps_max": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
-    "schedule_type": ["adaptive"],
+    "alpha": [0.4], 
+    "n": [10000], 
+    "p": [0.1], 
+    "threshold": [0.2], 
+    "eps_max": [0.3], 
+    "schedule_type": ["adaptive"], 
     
-    "lr": [0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0],
-    "batch_size": [10, 50, 100, 200],
-    "base_config": ["dqn_basic"],
-    "env_name": ["CartPole-v1"],
-    "target_update_period": [1000],
-    "total_steps": [20000],
+    "lr": [0.001], 
+    "batch_size": [10], 
+    "base_config": ["dqn_basic"], 
+    "env_name": ["LunarLander-v2"], 
+    "target_update_period": [1000], 
+    "total_steps": [300000, 100]
 }
 
-best_hyperparameters = find_best_hyperparameters_for_env("cartpole", "adaptive", all_hyperparameters, 5)
+all_hyperparameters = {
+    "schedule_timesteps": [10000], 
+    "final_p": [0.02], 
+    "initial_p": [1.0], 
+    "schedule_type":["linear"], 
+    "lr": [0.1], 
+    "batch_size": [100],
+    "base_config": ["dqn_basic"], 
+    "env_name": ["CartPole-v1"], 
+    "target_update_period": [1000], 
+    "total_steps": [300000, 10]
+}
+
+
+
+
+best_hyperparameters = find_best_hyperparameters_for_env("lunar", "linear", all_hyperparameters, 5)
 print("best_hyperparameters")
 print(best_hyperparameters)
