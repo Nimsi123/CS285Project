@@ -10,7 +10,6 @@ def find_best_run(commands, n):
 
     processes = []
     last_rewards = []
-
     for command in commands:
         # Use shell=True to run the command through the shell
         processes.append([])
@@ -124,11 +123,11 @@ all_hyperparameters = {
     "lr": [0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0],
     "batch_size": [10, 50, 100, 200],
     "base_config": ["dqn_basic"],
-    "env_name": ["CartPole-v1"],
+    "env_name": ["LunarLander-v2"],
     "target_update_period": [1000],
     "total_steps": [20000],
 }
 
-best_hyperparameters = find_best_hyperparameters_for_env("cartpole", "adaptive", all_hyperparameters, 5)
+best_hyperparameters = find_best_hyperparameters_for_env("lunarlander", "adaptive", all_hyperparameters, 5)
 print("best_hyperparameters")
 print(best_hyperparameters)
