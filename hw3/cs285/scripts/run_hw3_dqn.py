@@ -198,7 +198,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config_file", "-cfg", type=str, required=True)
 
-    parser.add_argument("--eval_interval", "-ei", type=int, default=1000)
+    parser.add_argument("--eval_interval", "-ei", type=int, default=10000)
     parser.add_argument("--num_eval_trajectories", "-neval", type=int, default=10)
     parser.add_argument("--num_render_trajectories", "-nvid", type=int, default=0)
 
