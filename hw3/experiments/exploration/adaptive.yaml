@@ -1,6 +1,6 @@
+alpha: 0.4
+eps_max: 0.6
+n: 10000
+p:  0.1
 schedule_type: adaptive
-n : 10000
-p : 0.005 
-alpha : 0.99 
-threshold : 0.15
-eps_max : 0.5
+threshold: 0.2
