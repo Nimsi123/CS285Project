@@ -1,7 +1,0 @@
-base_config: dqn_basic
-batch_size: 10
-env_name: LunarLander-v2
-exp_name: lr_0.001_batch_size_10_base_config_dqn_basic_env_name_LunarLander-v2_target_update_period_1000_total_steps_300000_alpha_0.4_n_10000_p_0.1_threshold_0.2_eps_max_0.3_schedule_type_adaptive
-lr: 0.001
-target_update_period: 1000
-total_steps: 300000

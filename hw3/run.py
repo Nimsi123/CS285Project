@@ -14,7 +14,7 @@ def find_best_run(commands, n):
     for command in commands:
         # Use shell=True to run the command through the shell
         processes.append([])
-        for i in range(n):
+        for i in range(2, n+2):
             command_extra = f"--seed {i+1}"
             process = subprocess.Popen(command + " " + command_extra, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             processes[-1].append(process)
@@ -105,7 +105,7 @@ def find_best_hyperparameters_for_env(env, exploration, all_hyperparameters, num
                 with open(f"experiments/dqn/{env}_{i}.yaml", 'w') as file:
                     yaml.dump(env_dict, file)
             
-            best_index = find_best_run(commands, n=3)
+            best_index = find_best_run(commands, n=2)
             # TODO: update this hyperparameter
             best_hyperparameters[param] = values[best_index]
         
@@ -120,34 +120,31 @@ all_hyperparameters = {
     "alpha": [0.4], 
     "n": [10000], 
     "p": [0.1], 
-    "threshold": [0.2], 
-    "eps_max": [0.3], 
+    "threshold": [0.3], 
+    "eps_max": [0.95], 
     "schedule_type": ["adaptive"], 
     
-    "lr": [0.001], 
-    "batch_size": [10], 
+    "lr": [0.01], 
+    "batch_size": [100], 
     "base_config": ["dqn_basic"], 
     "env_name": ["LunarLander-v2"], 
     "target_update_period": [1000], 
-    "total_steps": [300000, 100]
+    "total_steps": [300000, 1]
 }
 
-all_hyperparameters = {
-    "schedule_timesteps": [10000], 
-    "final_p": [0.02], 
-    "initial_p": [1.0], 
-    "schedule_type":["linear"], 
-    "lr": [0.1], 
-    "batch_size": [100],
-    "base_config": ["dqn_basic"], 
-    "env_name": ["CartPole-v1"], 
-    "target_update_period": [1000], 
-    "total_steps": [300000, 10]
-}
+# all_hyperparameters = {
+#     "schedule_timesteps": [10000], 
+#     "final_p": [0.02], 
+#     "initial_p": [1.0], 
+#     "schedule_type":["linear"], 
+#     "lr": [0.1], 
+#     "batch_size": [100],
+#     "base_config": ["dqn_basic"], 
+#     "env_name": ["CartPole-v1"], 
+#     "target_update_period": [1000], 
+#     "total_steps": [300000, 10]
+# }
 
-
-
-
-best_hyperparameters = find_best_hyperparameters_for_env("lunar", "linear", all_hyperparameters, 5)
+best_hyperparameters = find_best_hyperparameters_for_env("lunar", "adaptive", all_hyperparameters, 1)
 print("best_hyperparameters")
 print(best_hyperparameters)
