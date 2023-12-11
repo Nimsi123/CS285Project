@@ -1,0 +1,7 @@
+base_config: dqn_basic
+batch_size: 100
+env_name: MountainCar-v0
+exp_name: lr_0.1_batch_size_100_base_config_dqn_basic_env_name_MountainCar-v0_target_update_period_1000_total_steps_100000_alpha_0.99_n_10000_p_0.1_threshold_0.01_eps_max_0.5_schedule_type_adaptive
+lr: 0.1
+target_update_period: 1000
+total_steps: 100000

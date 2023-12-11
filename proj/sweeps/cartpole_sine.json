@@ -1,0 +1,13 @@
+{
+    "schedule_timesteps": [10000, 20000, 50000, 100000],
+    "final_p": [0.02],
+    "initial_p": [1.0],
+    "period_frac": [0.01, 0.1, 0.25],
+    "schedule_type": ["sinusoidal"],
+    "lr": [0.01, 0.1, 1.0],
+    "batch_size": [100, 200],
+    "base_config": ["dqn_basic"],
+    "env_name": ["CartPole-v1"],
+    "target_update_period": [1000],
+    "total_steps": [100000]
+}
