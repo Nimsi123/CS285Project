@@ -1,0 +1,5 @@
+schedule_type: sinusoidal
+schedule_timesteps: 20000
+final_p: 0.02
+initial_p: 1.0
+period_frac: 0.1
