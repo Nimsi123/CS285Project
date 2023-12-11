@@ -1,0 +1,6 @@
+base_config: dqn_basic
+env_name: MountainCar-v0
+
+target_update_period: 1000
+lr: 0.001
+batch_size: 10

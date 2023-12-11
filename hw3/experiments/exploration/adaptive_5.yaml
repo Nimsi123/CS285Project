@@ -1,0 +1,15 @@
+<<<<<<< HEAD
+alpha: 0.8
+eps_max: 0.1
+n: 100
+p: 0.01
+schedule_type: adaptive
+threshold: 0.01
+=======
+alpha: 0.4
+eps_max: 0.6
+n: 5000
+p: 0.01
+schedule_type: adaptive
+threshold: 0.2
+>>>>>>> 1aa3caa137661ff42d652db036392fb221ad5496
