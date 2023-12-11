@@ -15,6 +15,8 @@ def get_schedule_type(schedule_type: str):
             return ConstantSchedule
         elif schedule_type == "adaptive":
             return AdaptiveRewardBasedSchedule
+        elif schedule_type == "sinusoidal":
+            return SinusoidalSchedule
         else:
             raise ValueError("Invalid schedule type {}".format(schedule_type))
     
@@ -107,13 +109,18 @@ class LinearSchedule(object):
 
 class SinusoidalSchedule:
     
-    def __init__(self, period, decay):
-        self.period = period
-        self.decay = decay
+    def __init__(self, schedule_timesteps, period_frac, final_p, initial_p=1.0):
+        """Sinusoidal interpolation between initial_p and final_p over"""
+        self.schedule_timesteps = schedule_timesteps
+        self.final_p = final_p
+        self.initial_p = initial_p
+        self.period = period_frac * schedule_timesteps
+         
     
-    def value(self, t):
-        eps_max = 0.5
-        return eps_max * (1 + np.sin(2 * np.pi * t / self.period)) / 2 * np.exp(-self.decay * t)
+    def value(self, t, reward):
+        """See Schedule.value"""
+        fraction  = min(float(t) / self.schedule_timesteps, 1.0)
+        return (self.initial_p + fraction * (self.final_p - self.initial_p)) * (np.cos(2 * np.pi * t/self.period) ** 2)
     
 
 class AdaptiveRewardBasedSchedule:
