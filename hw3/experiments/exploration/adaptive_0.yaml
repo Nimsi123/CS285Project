@@ -1,6 +1,12 @@
 alpha: 0.4
+<<<<<<< HEAD
+eps_max: 0.95
+n: 10000
+p: 0.1
+=======
 eps_max: 0.3
 n: 10000
 p:  0.1
+>>>>>>> 13e766bcbc7bab4cf6bb19bdf04bf770406a46be
 schedule_type: adaptive
-threshold: 0.2
+threshold: 0.3
