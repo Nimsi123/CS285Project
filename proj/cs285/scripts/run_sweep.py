@@ -237,7 +237,7 @@ def run_sweep(sweep_name, params, n):
                     environment_config[k] = best_params[k]
                 for k in exploration_config:
                     exploration_config[k] = best_params[k]
-                environment_config["exp_name"] = "_".join([k + "_" + str(v) for k, v in environment_config.items()]) + "_" + "_".join([k + "_" + str(v) for k, v in exploration_config.items()])
+                environment_config["exp_name"] = "_".join([k + "_" + str(v) for k, v in environment_config.items() if k != "env_name"]) + "_" + "_".join([k + "_" + str(v) for k, v in exploration_config.items() if k != "schedule_type"])
                 
                 # save the configs files
                 with open(enviroment_config_fname, "w") as file:
@@ -269,14 +269,16 @@ def run_sweep(sweep_name, params, n):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--name", "-sn", type=str, required=True)
     parser.add_argument("--params_file", "-pf", type=str, required=True)
     parser.add_argument("--num_sweeps", "-ns", type=int, default=1)
     args = parser.parse_args()
     
     with open(args.params_file, "r") as f:
         params = json.load(f)
-    best_params = run_sweep(args.name, params, args.num_sweeps)
+    
+    sweep_name = params["env_name"][0] + "_" + params["schedule_type"][0]
+        
+    best_params = run_sweep(sweep_name, params, args.num_sweeps)
     print(best_params)
     
 if __name__ == "__main__":

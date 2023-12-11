@@ -26,7 +26,7 @@ def basic_dqn_config(
     target_update_period: int = 1000,
     clip_grad_norm: Optional[float] = None,
     use_double_q: bool = False,
-    learning_starts: int = 10000,
+    learning_starts: int = 5000,
     batch_size: int = 128,
     exploration_schedule_file: str = None,
     **kwargs
