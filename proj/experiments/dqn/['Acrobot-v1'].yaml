@@ -1,0 +1,7 @@
+base_config: dqn_basic
+batch_size: 100
+env_name: Acrobot-v1
+exp_name: lr_0.1_batch_size_100_base_config_dqn_basic_target_update_period_1000_total_steps_100000_schedule_timesteps_10000_final_p_0.02_initial_p_1.0
+lr: 0.1
+target_update_period: 1000
+total_steps: 100000

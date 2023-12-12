@@ -1,0 +1,1 @@
+{"schedule_timesteps": 20000, "final_p": 0.02, "initial_p": 1.0, "schedule_type": "linear", "lr": 1.0, "batch_size": 200, "base_config": "dqn_basic", "env_name": "CartPole-v1", "target_update_period": 1000, "total_steps": 100000}
