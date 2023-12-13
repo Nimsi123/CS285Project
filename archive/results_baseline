@@ -1,7 +1,0 @@
-[
-    {"schedule_timesteps": 5000, "final_p": 0.02, "initial_p": 1.0, "schedule_type": "linear", "lr": 0.1, "batch_size": 50, "base_config": "dqn_basic", "env_name": "CartPole-v1", "target_update_period": 1000, "total_steps": 10000}, 
-    {"schedule_timesteps": 10000, "final_p": 0.02, "initial_p": 1.0, "schedule_type": "linear", "lr": 0.1, "batch_size": 50, "base_config": "dqn_basic", "env_name": "CartPole-v1", "target_update_period": 1000, "total_steps": 10000}, 
-    {"schedule_timesteps": 10000, "final_p": 0.02, "initial_p": 1.0, "schedule_type": "linear", "lr": 0.01, "batch_size": 50, "base_config": "dqn_basic", "env_name": "CartPole-v1", "target_update_period": 1000, "total_steps": 10000}, 
-    {"schedule_timesteps": 10000, "final_p": 0.02, "initial_p": 1.0, "schedule_type": "linear", "lr": 0.01, "batch_size": 10, "base_config": "dqn_basic", "env_name": "CartPole-v1", "target_update_period": 1000, "total_steps": 10000},
-    {"schedule_timesteps": 10000, "final_p": 0.02, "initial_p": 1.0, "schedule_type": "linear", "lr": 0.1, "batch_size": 100, "base_config": "dqn_basic", "env_name": "CartPole-v1", "target_update_period": 1000, "total_steps": 10000}
-]
